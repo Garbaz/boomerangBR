@@ -4,8 +4,10 @@ mod player;
 mod traits;
 mod utils;
 mod keyboard;
+mod game_state;
 
 
+use game_state::GameState;
 use glm::vec2;
 use keyboard::Keyboard;
 use player::Player;
@@ -14,6 +16,7 @@ use sfml::{
     system::Clock,
     window::{Event, Style},
 };
+use traits::AsGlmVector2;
 
 fn main() {
     let mut window = RenderWindow::new(
@@ -28,7 +31,8 @@ fn main() {
 
     let mut keyboard = Keyboard::new();
 
-    let mut player = Player::new(vec2(200., 300.));
+    let mut game_state = GameState::new();
+    game_state.players.push(Player::new(window.size().as_glm() / 2.));
 
     let mut clock = Clock::start();
     loop {
@@ -44,13 +48,15 @@ fn main() {
             }
         }
         // UPDATE UPDATE UPDATE
-        player.update(dt, &keyboard);
+        game_state.update(dt, &keyboard);
 
-        window.clear(Color::rgb(0xCC, 0xFF, 0xCC));
+        window.clear(Color::rgb(0xCC, 0xCC, 0xCC));
         // DRAW DRAW DRAW
-        player.show(&mut window);
+        game_state.show(&mut window);
 
         debug_string += &format!("DeltaTime: {}\n", dt);
+        debug_string += &format!("PlayerPos: {:?}\n", game_state.players[0].pos);
+
         text.set_string(&debug_string);
         window.draw(&text);
 

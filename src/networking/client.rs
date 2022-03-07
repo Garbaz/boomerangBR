@@ -1,4 +1,4 @@
-use std::{io, net::TcpStream, ptr::NonNull};
+use std::{io, net::TcpStream};
 
 use super::message::{Message, Messenger};
 
