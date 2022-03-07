@@ -1,5 +1,9 @@
+mod boomerang;
 mod player;
+mod traits;
 
+use glm::vec2;
+use player::Player;
 use sfml::{
     graphics::{Color, RenderTarget, RenderWindow},
     system::Clock,
@@ -7,6 +11,8 @@ use sfml::{
 };
 
 fn main() {
+    let mut player = Player::new(vec2(200., 300.));
+
     let mut window = RenderWindow::new(
         (1280, 720),
         "Boomerang BR",
@@ -25,9 +31,12 @@ fn main() {
         }
 
         // UPDATE UPDATE UPDATE
+        player.update(dt);
 
         window.clear(Color::rgb(0xCC, 0xFF, 0xCC));
         // DRAW DRAW DRAW
+        player.show(&mut window);
+
         window.display();
     }
 }
