@@ -1,6 +1,6 @@
 use sfml::graphics::RenderWindow;
 
-use crate::{boomerang::Boomerang, input::Input, player::Player};
+use crate::{boomerang::Boomerang, player::Player};
 
 pub struct GameState{
     pub players: Vec<Player>,
@@ -14,9 +14,9 @@ impl GameState {
             boomerangs: Vec::<Boomerang>::new(),
         }
     }
-    pub fn update(&mut self, dt: f32, kb: &Input) {
+    pub fn update(&mut self, dt: f32) {
         for p in &mut self.players {
-            p.update(dt, kb);
+            p.update(dt);
         }
         for b in &mut self.boomerangs {
             b.update(dt);
