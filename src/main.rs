@@ -6,7 +6,7 @@ use sfml::{
 
 fn main() {
     let mut window = RenderWindow::new(
-        (1600, 900),
+        (1280, 720),
         "Boomerang BR",
         Style::CLOSE,
         &Default::default(),
