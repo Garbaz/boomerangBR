@@ -13,6 +13,10 @@ fn main() {
             msg: "Hello World!".to_string(),
         });
 
+        for m in server.receive_all() {
+            println!("{:?}", m);
+        }
+
         thread::sleep(time::Duration::from_millis(1000));
     }
 }

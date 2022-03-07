@@ -9,13 +9,17 @@ fn main() {
     loop {
         match client.receive() {
             Some(msg) => {
-                match msg {
-                    Message::Info { msg } => println!("Message: {}", msg),
-                    Message::PlayerUpdate { .. } => todo!(),
-                };
+                println!("{:?}", msg)
             }
             None => {}
         }
+
+        client.send(&Message::PlayerUpdate {
+            id: 0,
+            pos: (17., 12.),
+            vel: (-100., -75.),
+        });
+
         thread::sleep(time::Duration::from_millis(1000));
     }
 }
