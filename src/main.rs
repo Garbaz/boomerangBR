@@ -24,7 +24,7 @@ fn main() {
 
         // UPDATE UPDATE UPDATE
 
-        window.clear(Color::rgb(0xCC, 0xCC, 0xCC));
+        window.clear(Color::rgb(0xCC, 0xFF, 0xCC));
         // DRAW DRAW DRAW
         window.display();
     }
