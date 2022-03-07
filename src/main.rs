@@ -1,3 +1,5 @@
+mod player;
+
 use sfml::{
     graphics::{Color, RenderTarget, RenderWindow},
     system::Clock,
