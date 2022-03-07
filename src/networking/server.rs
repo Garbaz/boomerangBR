@@ -15,7 +15,7 @@ pub struct Server {
 impl Server {
     pub fn new() -> io::Result<Self> {
         let server = Self {
-            listener: TcpListener::bind("127.0.0.1:".to_owned() + PORT)?,
+            listener: TcpListener::bind("127.0.0.1:".to_string() + PORT)?,
             clients: Vec::new(),
         };
         server.listener.set_nonblocking(true)?;
