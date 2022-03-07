@@ -15,13 +15,13 @@ pub struct Player<'a> {
 }
 
 impl Player<'_> {
-    pub fn new(pos_init: Vec2) -> Self {
+    pub fn new(pos: Vec2) -> Self {
         let mut shape = sfml::graphics::CircleShape::new(20., 30);
         shape.set_fill_color(sfml::graphics::Color::BLACK);
         Self {
-            pos: pos_init,
+            pos,
             vel: vec2(0., 0.),
-            shape: shape,
+            shape,
         }
     }
     pub fn update(&mut self, dt: f32, kb: &Keyboard) {

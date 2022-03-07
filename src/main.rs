@@ -1,18 +1,18 @@
 mod boomerang;
+mod game_state;
+mod keyboard;
 mod networking;
 mod player;
 mod traits;
 mod utils;
-mod keyboard;
-mod game_state;
 
-
+use boomerang::Boomerang;
 use game_state::GameState;
 use glm::vec2;
 use keyboard::Keyboard;
 use player::Player;
 use sfml::{
-    graphics::{Color, RenderTarget, RenderWindow},
+    graphics::{Color, RenderTarget, RenderWindow, Transformable},
     system::Clock,
     window::{Event, Style},
 };
@@ -26,14 +26,17 @@ fn main() {
         &Default::default(),
     );
     let font = sfml::graphics::Font::from_file("./res/ProcessingSansPro-Semibold.ttf").unwrap();
-    let mut text = sfml::graphics::Text::new("test \ntest2", &font, 30);
+    let mut text = sfml::graphics::Text::new("test \ntest2", &font, 20);
+    text.set_position((10.,10.));
     text.set_fill_color(Color::BLACK);
 
     let mut keyboard = Keyboard::new();
 
     let mut game_state = GameState::new();
-    game_state.players.push(Player::new(window.size().as_glm() / 2.));
-
+    game_state
+        .players
+        .push(Player::new(window.size().as_glm() / 2.));
+    game_state.boomerangs.push(Boomerang::new(window.size().as_glm() / 2., vec2(500., 200.)));
     let mut clock = Clock::start();
     loop {
         let dt = clock.restart().as_seconds();
