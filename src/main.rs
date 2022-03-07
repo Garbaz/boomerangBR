@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 mod boomerang;
 mod game_state;
 mod input;
