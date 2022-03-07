@@ -9,6 +9,7 @@ use serde::{Deserialize, Serialize};
 pub enum Message {
     Info { msg: String },
     PlayerUpdate { id: u32, pos: (f32, f32), vel: (f32, f32) },
+    PlayerNew {id: u32 }
 }
 
 pub trait Messenger {

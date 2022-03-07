@@ -1,22 +1,12 @@
 #![allow(dead_code)]
 
-mod boomerang;
-mod game_state;
-mod networking;
-mod player;
-mod traits;
-mod utils;
-
-use boomerang::Boomerang;
-use game_state::GameState;
+use boomerang_br::{boomerang::Boomerang, game_state::GameState, player::Player, traits::AsGlmVector2};
 use glm::vec2;
-use player::Player;
 use sfml::{
     graphics::{Color, RenderTarget, RenderWindow, Transformable},
     system::Clock,
-    window::{Event, Style, mouse::Button},
+    window::{Event, Style},
 };
-use traits::AsGlmVector2;
 
 fn main() {
     let mut window = RenderWindow::new(
@@ -26,17 +16,22 @@ fn main() {
         &Default::default(),
     );
     window.set_vertical_sync_enabled(true);
-    
+
     let font = sfml::graphics::Font::from_file("./res/ProcessingSansPro-Semibold.ttf").unwrap();
     let mut text = sfml::graphics::Text::new("", &font, 20);
-    text.set_position((10.,10.));
+    text.set_position((10., 10.));
     text.set_fill_color(Color::BLACK);
 
     let mut game_state = GameState::new();
     game_state
         .players
         .push(Player::new(window.size().as_glm() / 2.));
-    game_state.boomerangs.push(Boomerang::new(window.size().as_glm() / 2., vec2(500., 200.)));
+    game_state
+        .boomerangs
+        .push(Boomerang::new(
+            window.size().as_glm() / 2.,
+            vec2(500., 200.),
+        ));
     let mut clock = Clock::start();
     loop {
         let dt = clock.restart().as_seconds();
