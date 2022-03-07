@@ -1,43 +1,59 @@
 use std::{
     io::{self},
-    net::{TcpListener, TcpStream},
+    net::{SocketAddr, TcpListener, TcpStream},
 };
 
 use super::message::{Message, Messenger};
 
+const PORT: &str = "1729";
+
 pub struct Server {
     listener: TcpListener,
-    clients: Vec<TcpStream>,
+    clients: Vec<(TcpStream, bool)>,
 }
 
 impl Server {
     pub fn new() -> io::Result<Self> {
-        return Ok(Self {
-            listener: TcpListener::bind("127.0.0.1:0")?,
+        let server = Self {
+            listener: TcpListener::bind("127.0.0.1:".to_owned() + PORT)?,
             clients: Vec::new(),
-        });
+        };
+        server.listener.set_nonblocking(true)?;
+        return Ok(server);
     }
 
     pub fn accept(&mut self) {
-        for s in self.listener.incoming() {
-            match s {
-                Ok(stream) => {
-                    self.clients.push(stream);
-                }
-                Err(e) => eprintln!("Client failed to connect: `{}`", e),
+        match self.listener.accept() {
+            Ok((stream, _)) => {
+                println!(
+                    "Server accepted new connection from {}",
+                    stream.peer_addr().unwrap()
+                );
+                stream.set_nonblocking(true).unwrap();
+                self.clients.push((stream, true));
+            }
+            Err(e) if e.kind() == io::ErrorKind::WouldBlock => {}
+            Err(e) => {
+                eprintln!("Server failed to accept connection: `{}`", e)
             }
         }
     }
 
     pub fn receive_all(&mut self) -> Vec<Message> {
+        self.clients.retain(|(_, alive)| *alive);
+
         let mut msgs = Vec::new();
-        for stream in self.clients.iter_mut() {
+        for (stream, alive) in self.clients.iter_mut() {
             match stream.receive() {
                 Ok(msg) => {
                     msgs.push(msg);
                 }
+                Err(e) if e.kind() == io::ErrorKind::WouldBlock => {}
+                Err(e) if e.kind() == io::ErrorKind::BrokenPipe => {
+                    *alive = false;
+                }
                 Err(e) => {
-                    eprintln!("Failed to receive message: `{}`", e)
+                    eprintln!("Server failed to receive message: `{:?}`:`{}`", e.kind(), e)
                 }
             }
         }
@@ -45,13 +61,26 @@ impl Server {
     }
 
     pub fn send_all(&mut self, message: &Message) {
-        for stream in self.clients.iter_mut() {
+        self.clients.retain(|(_, alive)| *alive);
+
+        for (stream, alive) in self.clients.iter_mut() {
             match stream.send(&message) {
                 Ok(_) => {}
+                Err(e) if e.kind() == io::ErrorKind::WouldBlock => {}
+                Err(e) if e.kind() == io::ErrorKind::BrokenPipe => {
+                    *alive = false;
+                }
                 Err(e) => {
-                    eprintln!("Client failed to send message: `{}`", e)
+                    eprintln!("Server failed to send message: `{:?}`:`{}`", e.kind(), e)
                 }
             }
+        }
+    }
+
+    pub fn address(&self) -> Option<SocketAddr> {
+        match self.listener.local_addr() {
+            Ok(address) => Some(address),
+            Err(_) => None,
         }
     }
 }
