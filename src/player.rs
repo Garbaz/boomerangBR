@@ -4,17 +4,17 @@ use sfml::{
     window::Key,
 };
 
-use crate::{keyboard::Keyboard, traits::AsSfmlVector2};
+use crate::{input::Input, traits::AsSfmlVector2};
 
 const SPEED: f32 = 400.;
 
-pub struct Player<'a> {
+pub struct Player {
     pub pos: Vec2,
     pub vel: Vec2,
-    shape: sfml::graphics::CircleShape<'a>,
+    shape: sfml::graphics::CircleShape<'static>,
 }
 
-impl Player<'_> {
+impl Player{
     pub fn new(pos: Vec2) -> Self {
         let mut shape = sfml::graphics::CircleShape::new(20., 30);
         shape.set_fill_color(sfml::graphics::Color::BLACK);
@@ -24,7 +24,7 @@ impl Player<'_> {
             shape,
         }
     }
-    pub fn update(&mut self, dt: f32, kb: &Keyboard) {
+    pub fn update(&mut self, dt: f32, kb: &Input) {
         let key_dir = Player::get_key_dir(kb);
         self.vel = key_dir * SPEED;
         self.pos = self.pos + self.vel * dt;
@@ -35,7 +35,7 @@ impl Player<'_> {
             .set_position((self.pos - self.shape.radius()).as_sfml());
         window.draw(&self.shape);
     }
-    fn get_key_dir(kb: &Keyboard) -> Vec2 {
+    fn get_key_dir(kb: &Input) -> Vec2 {
         let right = kb.is_key_pressed(Key::RIGHT) | kb.is_key_pressed(Key::D);
         let left = kb.is_key_pressed(Key::LEFT) | kb.is_key_pressed(Key::A);
         let up = kb.is_key_pressed(Key::UP) | kb.is_key_pressed(Key::W);

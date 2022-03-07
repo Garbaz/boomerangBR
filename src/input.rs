@@ -2,13 +2,15 @@ use std::collections::HashMap;
 
 use sfml::window::{Event, Key};
 
-pub struct Keyboard {
+pub struct Input {
     keys: HashMap<Key, bool>,
 }
 
-impl Keyboard {
-    pub fn new() -> Self{
-        Self{keys: HashMap::new()}
+impl Input {
+    pub fn new() -> Self {
+        Self {
+            keys: HashMap::new(),
+        }
     }
     pub fn update(&mut self, event: Event) {
         match event {
@@ -18,15 +20,15 @@ impl Keyboard {
             Event::KeyReleased { code, .. } => {
                 self.keys.insert(code, false);
             }
+
             _ => {}
         }
     }
-    pub fn is_key_pressed(&self, key:Key) -> bool{
-        if let Some(b) = self.keys.get(&key){
+    pub fn is_key_pressed(&self, key: Key) -> bool {
+        if let Some(b) = self.keys.get(&key) {
             return *b;
         } else {
             return false;
         }
     }
 }
-

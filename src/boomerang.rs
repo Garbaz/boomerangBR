@@ -6,14 +6,14 @@ use crate::traits::AsSfmlVector2;
 const FRICTION: f32 = 1.;
 const SPIN_INIT: f32 = 2.;
 const SPIN_FRICTION: f32 = 0.2;
-pub struct Boomerang<'a> {
+pub struct Boomerang {
     pos: Vec2,
     vel: Vec2,
-    shape: CircleShape<'a>,
+    shape: CircleShape<'static>,
     spin: f32
 }
 
-impl Boomerang<'_> {
+impl Boomerang {
     pub fn new(pos: Vec2, vel: Vec2) -> Self {
         let mut shape = CircleShape::new(10., 30);
         shape.set_fill_color(sfml::graphics::Color::RED);

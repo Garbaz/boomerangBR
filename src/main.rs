@@ -1,6 +1,6 @@
 mod boomerang;
 mod game_state;
-mod keyboard;
+mod input;
 mod networking;
 mod player;
 mod traits;
@@ -9,7 +9,7 @@ mod utils;
 use boomerang::Boomerang;
 use game_state::GameState;
 use glm::vec2;
-use keyboard::Keyboard;
+use input::Input;
 use player::Player;
 use sfml::{
     graphics::{Color, RenderTarget, RenderWindow, Transformable},
@@ -30,7 +30,7 @@ fn main() {
     text.set_position((10.,10.));
     text.set_fill_color(Color::BLACK);
 
-    let mut keyboard = Keyboard::new();
+    let mut keyboard = Input::new();
 
     let mut game_state = GameState::new();
     game_state
