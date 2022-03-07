@@ -25,6 +25,8 @@ fn main() {
         Style::CLOSE,
         &Default::default(),
     );
+    window.set_vertical_sync_enabled(true);
+    
     let font = sfml::graphics::Font::from_file("./res/ProcessingSansPro-Semibold.ttf").unwrap();
     let mut text = sfml::graphics::Text::new("test \ntest2", &font, 20);
     text.set_position((10.,10.));
