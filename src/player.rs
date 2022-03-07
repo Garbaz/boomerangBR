@@ -1,37 +1,53 @@
 use glm::{vec2, Vec2};
-use sfml::graphics::{RenderTarget, Transformable};
+use sfml::{
+    graphics::{RenderTarget, Shape, Transformable},
+    window::Key,
+};
 
-use crate::{boomerang, traits::AsSfmlVector2};
+use crate::{keyboard::Keyboard, traits::AsSfmlVector2};
+
+const SPEED: f32 = 400.;
 
 pub struct Player<'a> {
-    pos: Vec2,
-    vel: Vec2,
+    pub pos: Vec2,
+    pub vel: Vec2,
     shape: sfml::graphics::CircleShape<'a>,
-    boomerangs: Vec<boomerang::Boomerang<'a>>,
 }
 
 impl Player<'_> {
-    pub fn new(pos_init: Vec2) -> Self {
+    pub fn new(pos: Vec2) -> Self {
+        let mut shape = sfml::graphics::CircleShape::new(20., 30);
+        shape.set_fill_color(sfml::graphics::Color::BLACK);
         Self {
-            pos: pos_init,
-            vel: vec2(100., 0.),
-            shape: sfml::graphics::CircleShape::new(25., 30),
-            boomerangs: Vec::new(),
+            pos,
+            vel: vec2(0., 0.),
+            shape,
         }
     }
-    pub fn update(&mut self, dt: f32) {
-
+    pub fn update(&mut self, dt: f32, kb: &Keyboard) {
+        let key_dir = Player::get_key_dir(kb);
+        self.vel = key_dir * SPEED;
         self.pos = self.pos + self.vel * dt;
-        for b in &mut self.boomerangs {
-            b.update(dt);
-        }
     }
+
     pub fn show(&mut self, window: &mut sfml::graphics::RenderWindow) {
-        for b in &mut self.boomerangs {
-            b.show(window);
-        }
         self.shape
             .set_position((self.pos - self.shape.radius()).as_sfml());
         window.draw(&self.shape);
+    }
+    fn get_key_dir(kb: &Keyboard) -> Vec2 {
+        let right = kb.is_key_pressed(Key::RIGHT) | kb.is_key_pressed(Key::D);
+        let left = kb.is_key_pressed(Key::LEFT) | kb.is_key_pressed(Key::A);
+        let up = kb.is_key_pressed(Key::UP) | kb.is_key_pressed(Key::W);
+        let down = kb.is_key_pressed(Key::DOWN) | kb.is_key_pressed(Key::S);
+        let dir = vec2(
+            (right as i32 as f32) - (left as i32 as f32),
+            (down as i32 as f32) - (up as i32 as f32),
+        );
+        if dir != vec2(0., 0.) {
+            return glm::normalize(dir);
+        } else {
+            return vec2(0., 0.);
+        }
     }
 }
