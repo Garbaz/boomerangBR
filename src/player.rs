@@ -1,7 +1,7 @@
 use glm::{vec2, Vec2};
-use sfml::graphics::{RenderTarget, Transformable};
+use sfml::{graphics::{RenderTarget, Transformable}, window::Key};
 
-use crate::{boomerang, traits::AsSfmlVector2};
+use crate::{boomerang, traits::AsSfmlVector2, keyboard::{Keyboard}};
 
 pub struct Player<'a> {
     pos: Vec2,
@@ -19,12 +19,13 @@ impl Player<'_> {
             boomerangs: Vec::new(),
         }
     }
-    pub fn update(&mut self, dt: f32) {
+    pub fn update(&mut self, dt: f32, keyboard: &Keyboard) {
 
         self.pos = self.pos + self.vel * dt;
         for b in &mut self.boomerangs {
             b.update(dt);
         }
+        keyboard.is_key_pressed(Key::W);
     }
     pub fn show(&mut self, window: &mut sfml::graphics::RenderWindow) {
         for b in &mut self.boomerangs {
