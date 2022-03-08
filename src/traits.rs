@@ -24,11 +24,17 @@ where
 }
 
 pub trait AsSfmlVector2 {
-    fn as_sfml(&self) -> sfml::system::Vector2f;
+    fn as_sfml(&self) -> Vector2f;
 }
 
 impl AsSfmlVector2 for glm::Vector2<f32> {
-    fn as_sfml(&self) -> sfml::system::Vector2f {
+    fn as_sfml(&self) -> Vector2f {
         Vector2f::new(self.x, self.y)
+    }
+}
+
+impl AsSfmlVector2 for (u32, u32) {
+    fn as_sfml(&self) -> Vector2f {
+        Vector2f::new(self.0 as f32, self.1 as f32)
     }
 }

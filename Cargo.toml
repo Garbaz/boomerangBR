@@ -16,3 +16,6 @@ name = "test_server"
 
 [[example]]
 name = "test_client"
+
+[[example]]
+name = "texture_test"
