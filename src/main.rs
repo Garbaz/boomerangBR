@@ -5,7 +5,7 @@ use glm::vec2;
 use sfml::{
     graphics::{Color, RenderTarget, RenderWindow, Transformable},
     system::Clock,
-    window::{Event, Style},
+    window::{Event, Key, Style},
 };
 
 fn main() {
@@ -40,7 +40,7 @@ fn main() {
 
         while let Some(ev) = window.poll_event() {
             match ev {
-                Event::Closed => return,
+                Event::Closed | Event::KeyPressed { code: Key::ESCAPE, .. } => return,
                 _ => {}
             }
         }
