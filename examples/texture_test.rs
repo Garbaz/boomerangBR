@@ -1,4 +1,3 @@
-use boomerang_br::traits::AsSfmlVector2;
 use sfml::{
     graphics::{CircleShape, Color, RenderTarget, RenderWindow, Shape, Texture, Transformable},
     system::Clock,
