@@ -9,12 +9,7 @@ use sfml::{
 };
 
 fn main() {
-    let mut window = RenderWindow::new(
-        (1280, 720),
-        "Boomerang BR",
-        Style::CLOSE,
-        &Default::default(),
-    );
+    let mut window = RenderWindow::new((1280, 720), "Boomerang BR", Style::CLOSE, &Default::default());
     window.set_vertical_sync_enabled(true);
 
     let font = sfml::graphics::Font::from_file("./res/ProcessingSansPro-Semibold.ttf").unwrap();
@@ -25,16 +20,26 @@ fn main() {
     let mut game_state = GameState::new();
     game_state
         .players
-        .push(Player::new(window.size().as_glm() / 2.));
+        .push(Player::new(
+            window
+                .size()
+                .as_glm()
+                / 2.,
+        ));
     game_state
         .boomerangs
         .push(Boomerang::new(
-            window.size().as_glm() / 2.,
+            window
+                .size()
+                .as_glm()
+                / 2.,
             vec2(500., 200.),
         ));
     let mut clock = Clock::start();
     loop {
-        let dt = clock.restart().as_seconds();
+        let dt = clock
+            .restart()
+            .as_seconds();
 
         let mut debug_string = String::new();
 
