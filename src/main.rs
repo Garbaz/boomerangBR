@@ -1,6 +1,8 @@
 #![allow(dead_code)]
 
-use boomerang_br::{boomerang::Boomerang, game_state::GameState, player::Player, traits::AsGlmVector2};
+use boomerang_br::{
+    boomerang::Boomerang, game_state::GameState, player::Player, traits::AsGlmVector2,
+};
 use glm::vec2;
 use sfml::{
     graphics::{Color, RenderTarget, RenderWindow, Texture, Transformable},
@@ -43,13 +45,16 @@ fn main() {
 
         while let Some(ev) = window.poll_event() {
             match ev {
-                Event::Closed | Event::KeyPressed { code: Key::ESCAPE, .. } => return,
+                Event::Closed
+                | Event::KeyPressed {
+                    code: Key::ESCAPE, ..
+                } => return,
                 _ => {}
             }
         }
 
         // UPDATE UPDATE UPDATE
-        game_state.update(dt);
+        game_state.update(&window, dt );
 
         window.clear(Color::rgb(0xCC, 0xCC, 0xCC));
         // DRAW DRAW DRAW
@@ -57,6 +62,7 @@ fn main() {
 
         debug_string += &format!("DeltaTime: {}\n", dt);
         debug_string += &format!("PlayerPos: {:?}\n", game_state.players[0].pos);
+        debug_string += &format!("BoomerangsLen: {:?}\n", game_state.boomerangs.len());
 
         text.set_string(&debug_string);
         window.draw(&text);
