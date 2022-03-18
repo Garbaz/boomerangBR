@@ -5,7 +5,7 @@ use boomerang_br::{
 };
 use glm::vec2;
 use sfml::{
-    graphics::{Color, RenderTarget, RenderWindow, Texture, Transformable},
+    graphics::{Color, RenderTarget, RenderWindow, Transformable},
     system::Clock,
     window::{Event, Key, Style},
 };
@@ -19,7 +19,7 @@ fn main() {
     );
     window.set_vertical_sync_enabled(true);
 
-    let boomerang_texture= Texture::from_file("./res/boomerang.png").unwrap();
+    // let boomerang_texture= Texture::from_file("./res/boomerang.png").unwrap();
 
     let font = sfml::graphics::Font::from_file("./res/ProcessingSansPro-Semibold.ttf").unwrap();
     let mut text = sfml::graphics::Text::new("", &font, 30);
@@ -35,7 +35,6 @@ fn main() {
         .push(Boomerang::new(
             window.size().as_glm() / 2.,
             vec2(500., 200.),
-            &boomerang_texture,
         ));
     let mut clock = Clock::start();
     loop {
