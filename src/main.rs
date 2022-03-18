@@ -1,5 +1,7 @@
 #![allow(dead_code)]
 
+
+
 use boomerang_br::{
     boomerang::Boomerang, game_state::GameState, player::Player, traits::AsGlmVector2,
 };
@@ -49,7 +51,7 @@ fn main() {
         }
 
         // UPDATE UPDATE UPDATE
-        game_state.update(&window, dt );
+        game_state.update(&window, dt);
 
         window.clear(Color::rgb(0xCC, 0xCC, 0xCC));
         // DRAW DRAW DRAW

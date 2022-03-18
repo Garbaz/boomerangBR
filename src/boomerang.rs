@@ -25,7 +25,7 @@ impl Boomerang {
         self.vel =  self.vel *(1. - (FRICTION * dt));
 
         let force_dir = glm::mat2(0., -1., 1., 0.) * self.vel;
-        self.vel = glm::normalize(self.vel + force_dir * SPIN_INIT * dt) * glm::length(self.vel);
+        self.vel = glm::normalize(self.vel + force_dir * self.spin * dt) * glm::length(self.vel);
         self.pos = self.pos + self.vel * dt;
     }
     pub fn show(&mut self, window: &mut sfml::graphics::RenderWindow) {

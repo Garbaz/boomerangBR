@@ -7,8 +7,8 @@ use sfml::{
 use crate::{boomerang::Boomerang, traits::AsSfmlVector2};
 
 const SPEED: f32 = 400.;
-const MAX_THROW_SPEED_DIST:f32 = 250.;
-
+const MAX_THROW_SPEED: f32 = 1000.;
+const MAX_THROW_SPEED_DIST: f32 = 250.;
 pub struct Player {
     pub pos: Vec2,
     pub vel: Vec2,
@@ -29,10 +29,12 @@ impl Player {
         let key_dir = Player::get_key_dir();
         self.vel = key_dir * SPEED;
         self.pos = self.pos + self.vel * dt;
-        if Button::is_pressed(Button::LEFT) {
-            let mouse_diff = mouse_pos-self.pos;
-            // let throw_vel = glm::normalize(mouse_diff)*glm::max
-            self.throw_boomerang(boomerangs, mouse_diff);
+        if Button::LEFT.is_pressed() {
+            let mouse_diff = mouse_pos - self.pos;
+            let throw_vel = glm::normalize(mouse_diff)
+                * glm::min(1., glm::length(mouse_diff) / MAX_THROW_SPEED_DIST)
+                * MAX_THROW_SPEED;
+            self.throw_boomerang(boomerangs, throw_vel);
         }
     }
 
@@ -56,7 +58,7 @@ impl Player {
             return vec2(0., 0.);
         }
     }
-    fn throw_boomerang(&self, boomerangs: &mut Vec<Boomerang>, vel: Vec2) {
+    pub fn throw_boomerang(&self, boomerangs: &mut Vec<Boomerang>, vel: Vec2) {
         boomerangs.push(Boomerang::new(self.pos, vel))
     }
 }
