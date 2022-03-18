@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 use boomerang_br::{
     boomerang::Boomerang, game_state::GameState, player::Player, traits::AsGlmVector2,
 };
