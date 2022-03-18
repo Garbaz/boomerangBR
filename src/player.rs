@@ -58,7 +58,7 @@ impl Player {
             return vec2(0., 0.);
         }
     }
-    pub fn throw_boomerang(&self, boomerangs: &mut Vec<Boomerang>, vel: Vec2) {
-        boomerangs.push(Boomerang::new(self.pos, vel))
+    fn throw_boomerang(&self, boomerangs: &mut Vec<Boomerang>, vel: Vec2) {
+        boomerangs.push(Boomerang::new(self.pos, vel));
     }
 }

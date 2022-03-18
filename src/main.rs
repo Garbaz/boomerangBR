@@ -1,7 +1,3 @@
-#![allow(dead_code)]
-
-
-
 use boomerang_br::{
     boomerang::Boomerang, game_state::GameState, player::Player, traits::AsGlmVector2,
 };
@@ -21,6 +17,8 @@ fn main() {
     );
     window.set_vertical_sync_enabled(true);
 
+    // let boomerang_texture= Texture::from_file("./res/boomerang.png").unwrap();
+
     let font = sfml::graphics::Font::from_file("./res/ProcessingSansPro-Semibold.ttf").unwrap();
     let mut text = sfml::graphics::Text::new("", &font, 30);
     text.set_position((10., 10.));
@@ -30,10 +28,12 @@ fn main() {
     game_state
         .players
         .push(Player::new(window.size().as_glm() / 2.));
-    game_state.boomerangs.push(Boomerang::new(
-        window.size().as_glm() / 2.,
-        vec2(500., 200.),
-    ));
+    game_state
+        .boomerangs
+        .push(Boomerang::new(
+            window.size().as_glm() / 2.,
+            vec2(500., 200.),
+        ));
     let mut clock = Clock::start();
     loop {
         let dt = clock.restart().as_seconds();
