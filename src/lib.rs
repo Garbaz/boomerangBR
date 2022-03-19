@@ -5,3 +5,4 @@ pub mod player;
 pub mod traits;
 pub mod utils;
 pub mod resources;
+pub mod input;

@@ -1,5 +1,5 @@
 use boomerang_br::{
-    boomerang::Boomerang, game_state::GameState, player::Player, traits::AsGlmVector2,
+    boomerang::Boomerang, game_state::GameState, input, player::Player, traits::AsGlmVector2,
 };
 use glm::vec2;
 use sfml::{
@@ -28,24 +28,22 @@ fn main() {
     game_state
         .players
         .push(Player::new(window.size().as_glm() / 2.));
-    game_state
-        .boomerangs
-        .push(Boomerang::new(
-            window.size().as_glm() / 2.,
-            vec2(500., 200.),
-        ));
+    game_state.boomerangs.push(Boomerang::new(
+        window.size().as_glm() / 2.,
+        vec2(500., 200.),
+    ));
+
     let mut clock = Clock::start();
     loop {
         let dt = clock.restart().as_seconds();
 
         let mut debug_string = String::new();
 
+        input::clear();
         while let Some(ev) = window.poll_event() {
+            input::handle_event(ev);
             match ev {
-                Event::Closed
-                | Event::KeyPressed {
-                    code: Key::ESCAPE, ..
-                } => return,
+                Event::Closed | Event::KeyPressed { code: Key::ESCAPE, .. } => return,
                 _ => {}
             }
         }

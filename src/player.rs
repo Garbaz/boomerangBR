@@ -4,7 +4,7 @@ use sfml::{
     window::{mouse::Button, Key},
 };
 
-use crate::{boomerang::Boomerang, traits::AsSfmlVector2};
+use crate::{boomerang::Boomerang, input, traits::AsSfmlVector2};
 
 const SPEED: f32 = 400.;
 const MAX_THROW_SPEED: f32 = 1000.;
@@ -29,7 +29,7 @@ impl Player {
         let key_dir = Player::get_key_dir();
         self.vel = key_dir * SPEED;
         self.pos = self.pos + self.vel * dt;
-        if Button::LEFT.is_pressed() {
+        if input::mouse_just_pressed(Button::LEFT) {
             let mouse_diff = mouse_pos - self.pos;
             let throw_vel = glm::normalize(mouse_diff)
                 * glm::min(1., glm::length(mouse_diff) / MAX_THROW_SPEED_DIST)
