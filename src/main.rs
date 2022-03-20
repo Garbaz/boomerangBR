@@ -59,9 +59,6 @@ fn main() {
         debug_string += &format!("DeltaTime: {}\n", dt);
         debug_string += &format!("PlayerPos: {:?}\n", game_state.players[0].pos);
         debug_string += &format!("BoomerangsLen: {:?}\n", game_state.boomerangs.len());
-        debug_string += &format!("Boomerang0Pos: {:?}\n", game_state.boomerangs[0].pos);
-        debug_string += &format!("Boomerang0Vel: {:?}\n", game_state.boomerangs[0].vel);
-        debug_string += &format!("Boomerang0Spin: {:?}\n", game_state.boomerangs[0].spin);
 
         text.set_string(&debug_string);
         window.draw(&text);

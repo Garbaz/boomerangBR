@@ -43,14 +43,6 @@ impl<'a> Boomerang<'a> {
         self.vel = self.vel * (1. - (FRICTION * dt));
 
         let force_dir = glm::mat2(0., -1., 1., 0.) * self.vel;
-        println!(
-            "{:?}",
-            utils::normalize(self.vel + force_dir * self.spin * dt)
-        );
-        println!(
-            "{:?}",
-            utils::normalize(self.vel + force_dir * self.spin * dt) * glm::length(self.vel)
-        );
         self.vel = utils::normalize(self.vel + force_dir * self.spin * dt) * glm::length(self.vel);
         self.pos = self.pos + self.vel * dt;
 
