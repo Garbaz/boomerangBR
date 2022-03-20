@@ -25,9 +25,7 @@ impl<'a> Boomerang<'a> {
         shape.set_relative_origin((0.33, 0.5));
 
         unsafe {
-            if let Some(textures) = &resources::TEXTURES {
-                shape.set_texture(&textures.boomerang, false);
-            }
+            shape.set_texture(&(&resources::TEXTURES).as_ref().unwrap().boomerang, false);
         }
 
         Self {
