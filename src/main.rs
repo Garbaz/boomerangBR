@@ -1,4 +1,4 @@
-use boomerang_br::{boomerang::Boomerang, game_state::GameState, input, player::Player, traits::AsGlmVector2};
+use boomerang_br::{boomerang::Boomerang, game_state::GameState, input, player::Player, traits::AsGlmVector2, resources};
 use glm::vec2;
 use sfml::{
     graphics::{Color, RenderTarget, RenderWindow, Transformable},
@@ -19,6 +19,7 @@ fn main() {
     window.set_vertical_sync_enabled(true);
 
     // let boomerang_texture= Texture::from_file("./res/boomerang.png").unwrap();
+    resources::load();
 
     let font = sfml::graphics::Font::from_file("./res/ProcessingSansPro-Semibold.ttf").unwrap();
     let mut text = sfml::graphics::Text::new("", &font, 30);

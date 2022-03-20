@@ -1,15 +1,15 @@
-use sfml::{graphics::{Texture}, SfBox};
+use sfml::{graphics::Texture, SfBox};
 
 pub struct TextureStore {
     pub boomerang: SfBox<Texture>,
 }
 
-// pub struct ShapeStore<'a> {
-//     boomerang: CircleShape<'a>,
-// }
+pub static mut TEXTURES: Option<TextureStore> = None;
 
-thread_local! {
-    pub static TEXTURES : TextureStore = TextureStore {
-        boomerang: Texture::from_file("./res/boomerang.png").unwrap(),
-    };
+pub fn load() {
+    unsafe {
+        TEXTURES = Some(TextureStore {
+            boomerang: Texture::from_file("./res/boomerang.png").unwrap(),
+        });
+    }
 }
