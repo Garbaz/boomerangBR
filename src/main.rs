@@ -1,4 +1,6 @@
-use boomerang_br::{boomerang::Boomerang, game_state::GameState, input, player::Player, traits::AsGlmVector2, resources};
+use boomerang_br::{
+    boomerang::Boomerang, game_state::GameState, input, player::Player, resources, traits::AsGlmVector2,
+};
 use glm::vec2;
 use sfml::{
     graphics::{Color, RenderTarget, RenderWindow, Transformable},
@@ -35,7 +37,6 @@ fn main() {
 
     let mut clock = Clock::start();
     loop {
-
         let dt = clock.restart().as_seconds();
 
         let mut debug_string = String::new();
@@ -58,7 +59,7 @@ fn main() {
 
         debug_string += &format!("DeltaTime: {}\n", dt);
         debug_string += &format!("PlayerPos: {:?}\n", game_state.players[0].pos);
-        debug_string += &format!("BoomerangsLen: {:?}\n", game_state.boomerangs.len());
+        debug_string += &format!("PlayerHp: {:?}\n", game_state.players[0].hp);
 
         text.set_string(&debug_string);
         window.draw(&text);
