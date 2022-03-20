@@ -19,10 +19,11 @@ impl<'a> Boomerang<'a> {
     pub fn new(pos: Vec2, vel: Vec2) -> Self {
         let size = 40.;
         let mut shape = CircleShape::new(0.5 * size, 30);
-        // shape.set_fill_color(sfml::graphics::Color::RED);
-        // resources::boomerang_texture.with(|tex| {
-        //     shape.set_texture(tex, false);
-        // });
+        unsafe {
+            if let Some(textures) = &resources::TEXTURES {
+                shape.set_texture(&textures.boomerang, false);
+            }
+        }
 
         shape.set_origin((0.33 * size, 0.5 * size));
         Self {
@@ -47,11 +48,6 @@ impl<'a> Boomerang<'a> {
     pub fn show(&mut self, window: &mut sfml::graphics::RenderWindow) {
         self.shape
             .set_position((self.pos - self.shape.radius()).as_sfml());
-        resources::TEXTURES.with(|ts| {
-            let mut tmp = self.shape.clone();
-            tmp.set_texture(&ts.boomerang, false);
-            window.draw(&tmp);
-        });
-        // window.draw(&self.shape);
+        window.draw(&self.shape);
     }
 }
