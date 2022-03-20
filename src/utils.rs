@@ -1,9 +1,10 @@
 use glm::{vec2, Vec2};
 
 pub fn normalize(v: Vec2) -> Vec2 {
-    if v == vec2(0., 0.) {
+    let temp = glm::normalize(v);
+    if temp == vec2(f32::NAN, f32::NAN){
         return vec2(0., 0.);
     } else {
-        return glm::normalize(v);
+        return temp;
     }
 }
