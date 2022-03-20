@@ -18,7 +18,6 @@ fn main() {
     );
     window.set_vertical_sync_enabled(true);
 
-    // let boomerang_texture= Texture::from_file("./res/boomerang.png").unwrap();
     resources::load();
 
     let font = sfml::graphics::Font::from_file("./res/ProcessingSansPro-Semibold.ttf").unwrap();
