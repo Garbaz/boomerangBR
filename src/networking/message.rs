@@ -7,9 +7,21 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug)]
 pub enum Message {
-    Info { msg: String },
-    PlayerUpdate { id: u32, pos: (f32, f32), vel: (f32, f32) },
-    PlayerNew {id: u32 }
+    Info {
+        msg: String,
+    },
+    PlayerUpdate {
+        id: u32,
+        pos: (f32, f32),
+        rotation: f32,
+        vel: (f32, f32),
+    },
+    BoomerangUpdate {
+        id: u32,
+        pos: (f32, f32),
+        rotation: f32,
+        vel: (f32, f32),
+    },
 }
 
 pub trait Messenger {

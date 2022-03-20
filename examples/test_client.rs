@@ -17,6 +17,7 @@ fn main() {
         client.send(&Message::PlayerUpdate {
             id: 0,
             pos: (17., 12.),
+            rotation: 0.,
             vel: (-100., -75.),
         });
 
