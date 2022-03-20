@@ -4,7 +4,7 @@ use sfml::{
     window::{mouse::Button, Key},
 };
 
-use crate::{boomerang::Boomerang, input, traits::AsSfmlVector2};
+use crate::{boomerang::Boomerang, input, traits::AsSfmlVector2, utils::normalize};
 
 const SPEED: f32 = 400.;
 const MAX_THROW_SPEED: f32 = 1000.;
@@ -52,11 +52,7 @@ impl Player {
             (right as i32 as f32) - (left as i32 as f32),
             (down as i32 as f32) - (up as i32 as f32),
         );
-        if dir != vec2(0., 0.) {
-            return glm::normalize(dir);
-        } else {
-            return vec2(0., 0.);
-        }
+        return normalize(dir);
     }
     fn throw_boomerang(&self, boomerangs: &mut Vec<Boomerang>, vel: Vec2) {
         boomerangs.push(Boomerang::new(self.pos, vel));

@@ -7,6 +7,7 @@ use sfml::{
 };
 
 fn main() {
+    println!("{:?}", glm::length(vec2(0., 0.)));
     let mut window = RenderWindow::new(
         // (1280, 720),
         VideoMode::desktop_mode(),
@@ -58,6 +59,7 @@ fn main() {
         debug_string += &format!("DeltaTime: {}\n", dt);
         debug_string += &format!("PlayerPos: {:?}\n", game_state.players[0].pos);
         debug_string += &format!("BoomerangsLen: {:?}\n", game_state.boomerangs.len());
+        debug_string += &format!("BoomerangsLen: {:?}\n", game_state.boomerangs[0].pos);
 
         text.set_string(&debug_string);
         window.draw(&text);

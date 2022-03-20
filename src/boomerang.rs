@@ -1,15 +1,15 @@
 use glm::Vec2;
 use sfml::graphics::{CircleShape, RenderTarget, Shape, Transformable};
 
-use crate::{resources, traits::AsSfmlVector2};
+use crate::{resources, traits::AsSfmlVector2, utils::normalize};
 
 const FRICTION: f32 = 1.;
 const SPIN_INIT: f32 = 2.;
-const SPIN_FRICTION: f32 = 0.2;
+const SPIN_FRICTION: f32 = 0.5;
 
-const ROATION_SPEED_RATIO: f32 = 3.0;
+const ROATION_SPEED_RATIO: f32 = 800.0;
 pub struct Boomerang<'a> {
-    pos: Vec2,
+    pub pos: Vec2,
     vel: Vec2,
     shape: CircleShape<'a>,
     spin: f32,
@@ -38,11 +38,11 @@ impl<'a> Boomerang<'a> {
         self.vel = self.vel * (1. - (FRICTION * dt));
 
         let force_dir = glm::mat2(0., -1., 1., 0.) * self.vel;
-        self.vel = glm::normalize(self.vel + force_dir * self.spin * dt) * glm::length(self.vel);
+        self.vel = normalize(self.vel + force_dir * self.spin * dt) * glm::length(self.vel);
         self.pos = self.pos + self.vel * dt;
 
         self.shape
-            .rotate(glm::length(self.vel) * ROATION_SPEED_RATIO * dt);
+            .rotate(self.spin * ROATION_SPEED_RATIO * dt);
     }
     pub fn show(&mut self, window: &mut sfml::graphics::RenderWindow) {
         self.shape
