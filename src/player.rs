@@ -4,7 +4,7 @@ use sfml::{
     window::{mouse::Button, Key},
 };
 
-use crate::{boomerang::Boomerang, input, traits::AsSfmlVector2, utils};
+use crate::{boomerang::Boomerang, input, traits::{AsSfmlVector2, SetRelativeOrigin}, utils};
 
 const SPEED: f32 = 400.;
 const MAX_THROW_SPEED: f32 = 1000.;
@@ -18,6 +18,7 @@ pub struct Player {
 impl Player {
     pub fn new(pos: Vec2) -> Self {
         let mut shape = sfml::graphics::CircleShape::new(20., 30);
+        shape.set_relative_origin((0.5,0.5));
         shape.set_fill_color(sfml::graphics::Color::BLACK);
         Self {
             pos,
@@ -40,7 +41,7 @@ impl Player {
 
     pub fn show(&mut self, window: &mut sfml::graphics::RenderWindow) {
         self.shape
-            .set_position((self.pos - self.shape.radius()).as_sfml());
+            .set_position((self.pos).as_sfml());
         window.draw(&self.shape);
     }
     fn get_key_dir() -> Vec2 {
