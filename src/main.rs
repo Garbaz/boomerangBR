@@ -1,18 +1,18 @@
-use boomerang_br::{
-    boomerang::Boomerang, game_state::GameState, input, player::Player, traits::AsGlmVector2,
-};
+use boomerang_br::{boomerang::Boomerang, game_state::GameState, input, player::Player, traits::AsGlmVector2};
 use glm::vec2;
 use sfml::{
     graphics::{Color, RenderTarget, RenderWindow, Transformable},
     system::Clock,
-    window::{Event, Key, Style},
+    window::{Event, Key, Style, VideoMode},
 };
 
 fn main() {
     let mut window = RenderWindow::new(
-        (1280, 720),
+        // (1280, 720),
+        VideoMode::desktop_mode(),
         "Boomerang BR",
-        Style::CLOSE,
+        // Style::CLOSE,
+        Style::FULLSCREEN,
         &Default::default(),
     );
     window.set_vertical_sync_enabled(true);
