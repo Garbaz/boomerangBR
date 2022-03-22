@@ -19,6 +19,7 @@ use sfml::{
 };
 
 const SERVER_ADDR: &str = "127.0.0.1:1729";
+const TICK_RATE: f32 = 30.;
 
 fn main() {
     let mut window = RenderWindow::new(
@@ -55,6 +56,7 @@ fn main() {
     }
 
     let mut clock = Clock::start();
+    let mut network_clock = Clock::start();
     loop {
         let dt = clock.restart().as_seconds();
 
@@ -71,7 +73,10 @@ fn main() {
 
         // NETWORK NETWORK NETWORK
         if let Ok(client) = &mut client {
-            network_update(client, &mut game_state);
+            if network_clock.elapsed_time().as_seconds() > 1. / TICK_RATE {
+                network_clock.restart();
+                network_update(client, &mut game_state);
+            }
         }
 
         // UPDATE UPDATE UPDATE

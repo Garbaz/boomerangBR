@@ -5,17 +5,15 @@ use std::{
 
 use super::message::{Message, Messenger};
 
-const PORT: &str = "1729";
-
 pub struct Server {
     listener: TcpListener,
     clients: Vec<(TcpStream, bool)>,
 }
 
 impl Server {
-    pub fn new() -> io::Result<Self> {
+    pub fn new(port : &str) -> io::Result<Self> {
         let server = Self {
-            listener: TcpListener::bind("127.0.0.1:".to_string() + PORT)?,
+            listener: TcpListener::bind("127.0.0.1:".to_string() + port)?,
             clients: Vec::new(),
         };
         server.listener.set_nonblocking(true)?;

@@ -2,10 +2,11 @@ use std::{thread, time};
 
 use boomerang_br::networking::server::Server;
 
-const TICK_RATE : f32 = 60.;
+// const TICK_RATE : f32 = 64.;
+const PORT: &str = "1729";
 
 fn main() {
-    let mut server = Server::new().unwrap();
+    let mut server = Server::new(PORT).unwrap();
     println!("{}", server.address().unwrap());
     loop {
         server.accept();
@@ -19,6 +20,6 @@ fn main() {
             println!("{:?}", m);
             server.send_all(&m);
         }
-        thread::sleep(time::Duration::from_secs_f32(1. / TICK_RATE));
+        // thread::sleep(time::Duration::from_secs_f32(1. / TICK_RATE));
     }
 }

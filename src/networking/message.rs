@@ -3,7 +3,10 @@ use std::{
     net::TcpStream,
 };
 
+use rand::Rng;
 use serde::{Deserialize, Serialize};
+
+const MAX_MSGS_PER_RECEIVE : usize = 16;
 
 #[derive(Deserialize, Serialize, Debug)]
 pub enum Message {
@@ -36,17 +39,19 @@ impl Messenger for TcpStream {
     }
 
     fn receive(&mut self) -> Result<Vec<Message>, io::Error> {
-        let mut buf = vec![0u8; 0x1000];
-        self.read(&mut buf)?;
-        // buf[n] = 0;
-        let msg = String::from_utf8(buf).unwrap();
-        let mut v = Vec::new();
-        for s in msg.split('|') {
+        let mut msgs = Vec::new();
+        let mut buf = vec![0u8; 0x10000];
+        let n = self.read(&mut buf)?;
+        let buf_str = String::from_utf8(buf).unwrap();
+        for s in buf_str[..n].split('|') {
             if let Ok(m) = serde_json::from_str(s) {
-                v.push(m);
+                msgs.push(m);
+                
+            } else if s.len() > 0 {
+                eprintln!("(!)Bad msg: |{}|", s);
             }
         }
-        return Ok(v);
+        return Ok(msgs);
     }
 }
 

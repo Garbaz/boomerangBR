@@ -15,11 +15,11 @@ impl<'a> GameState<'a> {
         }
     }
     pub fn update(&mut self, window: &RenderWindow, dt: f32) {
-        self.players[0].update(&mut self.boomerangs, window.mouse_position().as_glm(), dt);
+        // self.players[0].update(&mut self.boomerangs, window.mouse_position().as_glm(), dt);
 
-        // for p in &mut self.players {
-        //     p.update(self, dt);
-        // }
+        for p in &mut self.players {
+            p.update(&mut self.boomerangs, window.mouse_position().as_glm(), dt);
+        }
         for b in &mut self.boomerangs {
             b.update(dt);
         }

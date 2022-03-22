@@ -2,8 +2,10 @@ use std::{thread, time};
 
 use boomerang_br::networking::{message::Message, server::Server};
 
+const PORT: &str = "1729";
+
 fn main() {
-    let mut server = Server::new().unwrap();
+    let mut server = Server::new(PORT).unwrap();
     println!("{}", server.address().unwrap());
     loop {
         server.accept();
