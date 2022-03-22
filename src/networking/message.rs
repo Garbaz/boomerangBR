@@ -3,10 +3,8 @@ use std::{
     net::TcpStream,
 };
 
-use rand::Rng;
 use serde::{Deserialize, Serialize};
 
-const MAX_MSGS_PER_RECEIVE : usize = 16;
 
 #[derive(Deserialize, Serialize, Debug)]
 pub enum Message {
