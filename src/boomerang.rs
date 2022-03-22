@@ -1,9 +1,16 @@
 use glm::Vec2;
-use sfml::graphics::{CircleShape, RenderTarget, RenderWindow, Shape, Transformable};
+use sfml::{
+    graphics::{RectangleShape, RenderTarget, RenderWindow, Shape, Transformable},
+    system::Vector2f,
+};
 
 use crate::{
+    networking::{
+        message::{FromMessage, Message},
+        netsync::{NetId, NetSync},
+    },
     resources,
-    traits::{AsSfmlVector2, SetRelativeOrigin},
+    traits::{AsGlmVector2, AsSfmlVector2, AsTupel, SetRelativeOrigin},
     utils,
 };
 
@@ -14,23 +21,27 @@ const RADIUS: f32 = 20.;
 
 const ROATION_SPEED_RATIO: f32 = 800.0;
 pub struct Boomerang<'a> {
+    pub net_id: NetId,
     pub pos: Vec2,
     pub vel: Vec2,
     pub radius: f32,
-    shape: CircleShape<'a>,
+    shape: RectangleShape<'a>,
     pub spin: f32,
 }
 
 impl<'a> Boomerang<'a> {
     pub fn new(pos: Vec2, vel: Vec2) -> Self {
-        let mut shape = CircleShape::new(RADIUS, 30);
+        let mut shape = RectangleShape::with_size(Vector2f::new(2. * RADIUS, 2. * RADIUS));
         shape.set_relative_origin((0.33, 0.5));
 
         unsafe {
-            shape.set_texture(&(&resources::TEXTURES).as_ref().unwrap().boomerang, false);
+            if let Some(textures) = &resources::TEXTURES {
+                shape.set_texture(&textures.boomerang, false);
+            }
         }
 
         Self {
+            net_id: NetId::new(None),
             pos,
             vel,
             radius: RADIUS,
@@ -51,10 +62,51 @@ impl<'a> Boomerang<'a> {
     }
     pub fn show(&mut self, window: &mut RenderWindow) {
         self.shape.set_position(self.pos.as_sfml());
-        let mut temp = sfml::graphics::CircleShape::new(self.shape.radius(), 30);
-        temp.set_relative_origin((0.5, 0.5));
-        temp.set_position(self.pos.as_sfml());
-        window.draw(&temp);
         window.draw(&self.shape);
+    }
+}
+
+impl NetSync for Boomerang<'_> {
+    fn take_sync(&mut self, msg: &Message) -> bool {
+        match msg {
+            Message::BoomerangUpdate { id, pos, rotation, vel } if *id == self.net_id.id => {
+                if !self.net_id.author {
+                    self.pos = pos.as_glm();
+                    self.shape.set_rotation(*rotation);
+                    self.vel = vel.as_glm();
+                }
+                return true;
+            }
+            _ => {
+                return false;
+            }
+        }
+    }
+
+    fn give_sync(&self) -> Option<Message> {
+        if self.net_id.author {
+            Some(Message::BoomerangUpdate {
+                id: self.net_id.id,
+                pos: self.pos.as_tupel(),
+                rotation: self.shape.rotation(),
+                vel: self.vel.as_tupel(),
+            })
+        } else {
+            None
+        }
+    }
+}
+
+impl FromMessage for Boomerang<'_> {
+    fn from_message(msg: &Message) -> Option<Self> {
+        match msg {
+            Message::BoomerangUpdate { id, pos, rotation, vel } => {
+                let mut b = Boomerang::new(pos.as_glm(), vel.as_glm());
+                b.net_id = NetId::new(Some(*id));
+                b.shape.set_rotation(*rotation);
+                Some(b)
+            }
+            _ => None,
+        }
     }
 }

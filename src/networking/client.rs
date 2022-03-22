@@ -11,11 +11,11 @@ impl Client {
         let client = Self {
             stream: TcpStream::connect(address)?,
         };
-        // client.stream.set_nonblocking(true)?;
+        client.stream.set_nonblocking(true)?;
         return Ok(client);
     }
 
-    pub fn receive(&mut self) -> Option<Message> {
+    pub fn receive(&mut self) -> Option<Vec<Message>> {
         match self.stream.receive() {
             Ok(msg) => {
                 return Some(msg);
@@ -28,8 +28,8 @@ impl Client {
         return None;
     }
 
-    pub fn send(&mut self, message: &Message) {
-        match self.stream.send(&message) {
+    pub fn send(&mut self, msg: &Message) {
+        match self.stream.send(&msg) {
             Ok(_) => {}
             Err(e) if e.kind() == io::ErrorKind::WouldBlock => {}
             Err(e) => {

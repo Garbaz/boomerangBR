@@ -2,7 +2,7 @@ use sfml::graphics::RenderWindow;
 
 use crate::{boomerang::Boomerang, player::Player, traits::AsGlmVector2};
 
-pub struct GameState<'a>{
+pub struct GameState<'a> {
     pub players: Vec<Player>,
     pub boomerangs: Vec<Boomerang<'a>>,
 }

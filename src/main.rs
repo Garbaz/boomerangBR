@@ -1,5 +1,15 @@
 use boomerang_br::{
-    boomerang::Boomerang, game_state::GameState, input, player::Player, resources, traits::AsGlmVector2,
+    boomerang::Boomerang,
+    game_state::GameState,
+    input,
+    networking::{
+        client::Client,
+        message::{FromMessage, Message},
+        netsync::NetSync,
+    },
+    player::Player,
+    resources,
+    traits::AsGlmVector2,
 };
 use glm::vec2;
 use sfml::{
@@ -10,14 +20,15 @@ use sfml::{
 
 fn main() {
     let mut window = RenderWindow::new(
-        // (1280, 720),
-        VideoMode::desktop_mode(),
+        (1280/2, 720/2),
+        // VideoMode::desktop_mode(),
         "Boomerang BR",
-        // Style::CLOSE,
-        Style::FULLSCREEN,
+        Style::CLOSE,
+        // Style::FULLSCREEN,
         &Default::default(),
     );
     window.set_vertical_sync_enabled(true);
+    window.set_key_repeat_enabled(false);
 
     resources::load();
 
@@ -35,6 +46,8 @@ fn main() {
         vec2(500., 200.),
     ));
 
+    let mut client = Client::new("127.0.0.1:1729".parse().unwrap()).unwrap();
+
     let mut clock = Clock::start();
     loop {
         let dt = clock.restart().as_seconds();
@@ -50,6 +63,9 @@ fn main() {
             }
         }
 
+        // NETWORK NETWORK NETWORK
+        network_update(&mut client, &mut game_state);
+
         // UPDATE UPDATE UPDATE
         game_state.update(&window, dt);
 
@@ -60,10 +76,62 @@ fn main() {
         debug_string += &format!("DeltaTime: {}\n", dt);
         debug_string += &format!("PlayerPos: {:?}\n", game_state.players[0].pos);
         debug_string += &format!("PlayerHp: {:?}\n", game_state.players[0].hp);
+        debug_string += &format!("Input Test: {}\n", input::key_just_pressed(Key::SPACE));
+        debug_string += &format!("Focus: {}\n", window.has_focus());
 
         text.set_string(&debug_string);
         window.draw(&text);
 
         window.display();
+    }
+}
+
+fn network_update(client: &mut Client, game_state: &mut GameState) {
+    while let Some(msgs) = client.receive() {
+        for msg in msgs {
+            match msg {
+                Message::PlayerUpdate { .. } => {
+                    let mut new = true;
+                    for p in game_state.players.iter_mut() {
+                        if p.take_sync(&msg) {
+                            new = false;
+                            break;
+                        }
+                    }
+                    if new {
+                        if let Some(p) = Player::from_message(&msg) {
+                            game_state.players.push(p);
+                        }
+                    }
+                }
+                Message::BoomerangUpdate { .. } => {
+                    let mut new = true;
+                    for p in game_state.boomerangs.iter_mut() {
+                        if p.take_sync(&msg) {
+                            new = false;
+                            break;
+                        }
+                    }
+                    if new {
+                        if let Some(b) = Boomerang::from_message(&msg) {
+                            game_state.boomerangs.push(b);
+                        }
+                    }
+                }
+                _ => {}
+            }
+        }
+    }
+
+    for p in game_state.players.iter() {
+        if let Some(msg) = p.give_sync() {
+            client.send(&msg);
+        }
+    }
+
+    for b in game_state.boomerangs.iter() {
+        if let Some(msg) = b.give_sync() {
+            client.send(&msg);
+        }
     }
 }

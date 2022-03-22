@@ -26,6 +26,12 @@ where
     }
 }
 
+impl AsGlmVector2 for (f32, f32) {
+    fn as_glm(&self) -> glm::Vec2 {
+        glm::vec2(self.0, self.1)
+    }
+}
+
 pub trait AsSfmlVector2 {
     fn as_sfml(&self) -> Vector2f;
 }

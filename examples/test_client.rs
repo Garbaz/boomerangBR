@@ -21,6 +21,14 @@ fn main() {
             vel: (-100., -75.),
         });
 
+        client.send(&Message::BoomerangUpdate {
+            id: 1,
+            pos: (42., 17.),
+            rotation: 231.,
+            vel: (1., 2.),
+        });
+
         thread::sleep(time::Duration::from_millis(1000));
+        println!("...")
     }
 }

@@ -26,19 +26,33 @@ pub enum Message {
 
 pub trait Messenger {
     fn send(&mut self, msg: &Message) -> Result<(), io::Error>;
-    fn receive(&mut self) -> Result<Message, io::Error>;
+    fn receive(&mut self) -> Result<Vec<Message>, io::Error>;
 }
 
 impl Messenger for TcpStream {
     fn send(&mut self, msg: &Message) -> Result<(), io::Error> {
-        write!(self, "{}", serde_json::to_string(msg)?)?;
+        write!(self, "{}|", serde_json::to_string(msg)?)?;
         return Ok(());
     }
 
-    fn receive(&mut self) -> Result<Message, io::Error> {
-        let mut buf = vec![0u8; 0x1000];
+    fn receive(&mut self) -> Result<Vec<Message>, io::Error> {
+        let mut buf = vec![0u8; 0x4000];
         let n = self.read(&mut buf)?;
+        buf[n] = 0;
         let msg = String::from_utf8(buf).unwrap();
-        return Ok(serde_json::from_str(&msg[..n])?);
+        let mut v = Vec::new();
+        for s in msg.split('|') {
+            if let Ok(m) = serde_json::from_str(s) {
+                v.push(m);
+            }
+        }
+        return Ok(v);
     }
+}
+
+pub trait FromMessage
+where
+    Self: Sized,
+{
+    fn from_message(msg: &Message) -> Option<Self>;
 }

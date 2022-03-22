@@ -45,26 +45,26 @@ impl Server {
         let mut msgs = Vec::new();
         for (stream, alive) in self.clients.iter_mut() {
             match stream.receive() {
-                Ok(msg) => {
-                    msgs.push(msg);
+                Ok(m) => {
+                    msgs.extend(m);
                 }
                 Err(e) if e.kind() == io::ErrorKind::WouldBlock => {}
                 Err(e) if e.kind() == io::ErrorKind::BrokenPipe => {
                     *alive = false;
                 }
                 Err(e) => {
-                    eprintln!("Server failed to receive message: `{:?}`:`{}`", e.kind(), e)
+                    eprintln!("Server failed to receive message: `{:?}`:`{}`", e.kind(), e);
                 }
             }
         }
         return msgs;
     }
 
-    pub fn send_all(&mut self, message: &Message) {
+    pub fn send_all(&mut self, msg: &Message) {
         self.clients.retain(|(_, alive)| *alive);
 
         for (stream, alive) in self.clients.iter_mut() {
-            match stream.send(&message) {
+            match stream.send(&msg) {
                 Ok(_) => {}
                 Err(e) if e.kind() == io::ErrorKind::WouldBlock => {}
                 Err(e) if e.kind() == io::ErrorKind::BrokenPipe => {
