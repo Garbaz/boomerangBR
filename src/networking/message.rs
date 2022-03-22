@@ -36,9 +36,9 @@ impl Messenger for TcpStream {
     }
 
     fn receive(&mut self) -> Result<Vec<Message>, io::Error> {
-        let mut buf = vec![0u8; 0x4000];
-        let n = self.read(&mut buf)?;
-        buf[n] = 0;
+        let mut buf = vec![0u8; 0x1000];
+        self.read(&mut buf)?;
+        // buf[n] = 0;
         let msg = String::from_utf8(buf).unwrap();
         let mut v = Vec::new();
         for s in msg.split('|') {

@@ -18,9 +18,11 @@ use sfml::{
     window::{Event, Key, Style, VideoMode},
 };
 
+const SERVER_ADDR: &str = "127.0.0.1:1729";
+
 fn main() {
     let mut window = RenderWindow::new(
-        (1280/2, 720/2),
+        (960, 540),
         // VideoMode::desktop_mode(),
         "Boomerang BR",
         Style::CLOSE,
@@ -46,7 +48,11 @@ fn main() {
         vec2(500., 200.),
     ));
 
-    let mut client = Client::new("127.0.0.1:1729".parse().unwrap()).unwrap();
+    let mut client = Client::new(SERVER_ADDR.parse().unwrap());
+    if let Err(err) = &client {
+        eprintln!("{}", err);
+        println!("Couldn't connect to server, is it running? Proceeding offline...");
+    }
 
     let mut clock = Clock::start();
     loop {
@@ -64,7 +70,9 @@ fn main() {
         }
 
         // NETWORK NETWORK NETWORK
-        network_update(&mut client, &mut game_state);
+        if let Ok(client) = &mut client {
+            network_update(client, &mut game_state);
+        }
 
         // UPDATE UPDATE UPDATE
         game_state.update(&window, dt);
