@@ -1,0 +1,212 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'boomerang_br'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=boomerang_br"
+                ],
+                "filter": {
+                    "name": "boomerang_br",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'boomerang_br'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=boomerang_br",
+                    "--package=boomerang_br"
+                ],
+                "filter": {
+                    "name": "boomerang_br",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'boomerang_br'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=boomerang_br",
+                    "--package=boomerang_br"
+                ],
+                "filter": {
+                    "name": "boomerang_br",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'test_server'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=test_server",
+                    "--package=boomerang_br"
+                ],
+                "filter": {
+                    "name": "test_server",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'test_server'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=test_server",
+                    "--package=boomerang_br"
+                ],
+                "filter": {
+                    "name": "test_server",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'test_client'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=test_client",
+                    "--package=boomerang_br"
+                ],
+                "filter": {
+                    "name": "test_client",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'test_client'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=test_client",
+                    "--package=boomerang_br"
+                ],
+                "filter": {
+                    "name": "test_client",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'texture_test'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=texture_test",
+                    "--package=boomerang_br"
+                ],
+                "filter": {
+                    "name": "texture_test",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'texture_test'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=texture_test",
+                    "--package=boomerang_br"
+                ],
+                "filter": {
+                    "name": "texture_test",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'relay_sever'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=relay_sever",
+                    "--package=boomerang_br"
+                ],
+                "filter": {
+                    "name": "relay_sever",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'relay_sever'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=relay_sever",
+                    "--package=boomerang_br"
+                ],
+                "filter": {
+                    "name": "relay_sever",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

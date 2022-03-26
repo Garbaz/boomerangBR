@@ -19,7 +19,7 @@ use sfml::{
 };
 
 const SERVER_ADDR: &str = "127.0.0.1:1729";
-const TICK_RATE: f32 = 30.;
+const TICK_RATE: f32 = 60.;
 
 fn main() {
     let mut window = RenderWindow::new(

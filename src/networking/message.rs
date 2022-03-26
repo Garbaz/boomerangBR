@@ -5,6 +5,8 @@ use std::{
 
 use serde::{Deserialize, Serialize};
 
+const REC_BUFFER_SIZE : usize = 0x100000;
+
 
 #[derive(Deserialize, Serialize, Debug)]
 pub enum Message {
@@ -38,7 +40,7 @@ impl Messenger for TcpStream {
 
     fn receive(&mut self) -> Result<Vec<Message>, io::Error> {
         let mut msgs = Vec::new();
-        let mut buf = vec![0u8; 0x10000];
+        let mut buf = vec![0u8; REC_BUFFER_SIZE];
         let n = self.read(&mut buf)?;
         let buf_str = String::from_utf8(buf).unwrap();
         for s in buf_str[..n].split('|') {
